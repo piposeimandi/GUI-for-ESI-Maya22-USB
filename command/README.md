@@ -1,4 +1,4 @@
-ESI Maya22 Command PyControl
+command / maya22-control.py
 ==========
 
 This is control application for the [ESI Maya22](http://www.esi-audio.com/products/maya22usb/) usb sound device.
