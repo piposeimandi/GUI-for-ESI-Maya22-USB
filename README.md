@@ -2,7 +2,7 @@
 
 This project provides a command line interface and a graphical interface to control the [ESI Maya22](http://www.esi-audio.com/products/maya22usb/) usb sound device. The interface allows you to adjust input and output volumes, enable/disable monitoring and headphones, and synchronize output volumes. Configuration is automatically saved to a JSON file.
 
-![panel control](./images/img1.png)
+![panel control](./docs/images/img1.png)
 
 The graphical interface is achieved by running the "main.py" file, which launches a GUI using python-tk. This interface interacts with "maya22-control.py," which communicates with the python-hidapi library responsible for sending and receiving data with the Maya22 USB sound interface.
 

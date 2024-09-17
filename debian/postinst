@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Verificar si las dependencias necesarias están instaladas
+DEPENDENCIES="python3 python3-tk python3-hid"
+
+for DEP in $DEPENDENCIES; do
+    if ! dpkg -s $DEP >/dev/null 2>&1; then
+        echo "Dependencia faltante: $DEP. Instalando..."
+        apt-get update
+        apt-get install -y $DEP
+    fi
+done
+
+
+# Crear enlace simbólico para ejecutar el programa principal desde la terminal
+if [ ! -L /usr/local/bin/maya22 ]; then
+    ln -s /usr/bin/python3 /usr/share/maya22-panel-control/main.py /usr/local/bin/maya22
+fi
+
+# Crear enlace simbólico para ejecutar otro script de control desde la terminal
+#if [ ! -L /usr/local/bin/maya22-control ]; then
+#    ln -s /usr/bin/python3 /usr/share/maya22-panel-control/command/maya22-control.py /usr/local/bin/maya22-pycontrol
+#fi
+
+# Detectar la ruta del escritorio del usuario
+USER_DESKTOP_DIR=$(sudo -u $SUDO_USER xdg-user-dir DESKTOP 2>/dev/null)
+if [ -z "$USER_DESKTOP_DIR" ]; then
+    USER_DESKTOP_DIR="$HOME/Desktop"
+    if [ ! -d "$USER_DESKTOP_DIR" ]; then
+        USER_DESKTOP_DIR="$HOME/Escritorio"
+    fi
+fi
+
+# Copiar el archivo .desktop al escritorio del usuario
+if [ -d "$USER_DESKTOP_DIR" ]; then
+    cp /usr/share/maya22-panel-control/maya22.desktop "$USER_DESKTOP_DIR/"
+    chmod +x "$USER_DESKTOP_DIR/maya22.desktop"
+else
+    echo "No se pudo encontrar el escritorio del usuario"
+fi
+
+
+# Detectar la ruta del escritorio del usuario
+USER_DESKTOP_DIR=$(sudo -u $SUDO_USER xdg-user-dir DESKTOP 2>/dev/null)
+if [ -z "$USER_DESKTOP_DIR" ]; then
+    USER_DESKTOP_DIR="$HOME/Desktop"
+    if [ ! -d "$USER_DESKTOP_DIR" ]; then
+        USER_DESKTOP_DIR="$HOME/Escritorio"
+    fi
+fi
+
+# Copiar el archivo .desktop al escritorio del usuario
+if [ -d "$USER_DESKTOP_DIR" ]; then
+    cp /usr/share/maya22-panel-control/maya22.desktop "$USER_DESKTOP_DIR/"
+    chmod +x "$USER_DESKTOP_DIR/maya22.desktop"
+else
+    echo "No se pudo encontrar el escritorio del usuario"
+fi

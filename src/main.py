@@ -74,7 +74,9 @@ class AudioControlApp(tk.Tk):
        
 
     def run_command(self, command):
-        subprocess.run(['python3', './command/maya22-control.py'] + command)
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        command_path = os.path.join(script_dir, 'maya22-control.py')
+        subprocess.run(['python3', command_path] + command)
 
     def set_input_channel(self):
         channel = self.input_var.get().lower()

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Maya22 Panel Control
+Comment=Panel de control para Maya22
+Exec=python3 /usr/share/maya22-panel-control/main.py
+Icon=/usr/share/maya22-panel-control/icono.png
+Terminal=false
+Type=Application
+Categories=Utility;
