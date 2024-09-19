@@ -32,7 +32,12 @@ class AudioControlApp(tk.Tk):
         self.hiz_radio = ttk.Radiobutton(input_frame, text='Mic Hi-Z', variable=self.input_var, value='mic_hiz', command=self.set_input_channel)
         self.hiz_radio.grid(row=3, column=0, sticky='w')
         self.hiz_radio = ttk.Radiobutton(input_frame, text='Mute', variable=self.input_var, value='mute', command=self.set_input_channel)
-        self.hiz_radio.grid(row=5, column=1, sticky='w')
+        self.hiz_radio.grid(row=4, column=1, sticky='w')
+
+        # Monitor button as a CheckButton
+        self.monitor_var = tk.BooleanVar()
+        self.monitor_button = ttk.Checkbutton(input_frame, text='Monitor', variable=self.monitor_var, command=self.toggle_monitor)
+        self.monitor_button.grid(row=4, column=2, padx=5)
 
         # Volume sliders for Input
         self.input_slider_1 = ttk.Scale(input_frame, from_=127, to=0, orient='vertical', command=self.set_input_left_volume)
@@ -40,10 +45,7 @@ class AudioControlApp(tk.Tk):
         self.input_slider_2 = ttk.Scale(input_frame, from_=127, to=0, orient='vertical', command=self.set_input_right_volume)
         self.input_slider_2.grid(row=0, column=2, rowspan=3, padx=10)
 
-          # Monitor button as a CheckButton
-        self.monitor_var = tk.BooleanVar()
-        self.monitor_button = ttk.Checkbutton(input_frame, text='Monitor', variable=self.monitor_var, command=self.toggle_monitor)
-        self.monitor_button.grid(row=4, column=2, padx=5)
+
 
         # Output Section
         output_frame = ttk.LabelFrame(self, text='OUTPUT')
@@ -66,17 +68,10 @@ class AudioControlApp(tk.Tk):
         self.mute_output_button.grid(row=2, column=0,columnspan=2, pady=5)
 
 
-        # Control Buttons
-        #control_frame = ttk.Frame(self)
-        #control_frame.grid(row=1, column=0, columnspan=3, pady=10)
-
-     
-       
-
     def run_command(self, command):
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        command_path = os.path.join(script_dir, 'maya22-control.py')
-        subprocess.run(['python3', command_path] + command)
+        command_path = os.path.join(script_dir, 'maya22-control')
+        subprocess.run(['maya22-control'] + command)
 
     def set_input_channel(self):
         channel = self.input_var.get().lower()
@@ -144,9 +139,6 @@ class AudioControlApp(tk.Tk):
                 self.mute_output_var.set(config.get('mute_output', False))
                 self.monitor_var.set(config.get('monitor', False))
 
-def main():
-    app = AudioControlApp()
-    app.mainloop()
+app = AudioControlApp()
+app.mainloop()
 
-if __name__ == '__main__':
-    main()

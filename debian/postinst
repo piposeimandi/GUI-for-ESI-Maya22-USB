@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Verificar si las dependencias necesarias están instaladas
-DEPENDENCIES="python3 python3-tk python3-hid"
+DEPENDENCIES="python3 python3-tk "
 
 for DEP in $DEPENDENCIES; do
     if ! dpkg -s $DEP >/dev/null 2>&1; then
@@ -11,23 +11,56 @@ for DEP in $DEPENDENCIES; do
     fi
 done
 
-
 # Crear enlace simbólico para ejecutar el programa principal desde la terminal
-if [ ! -L /usr/local/bin/maya22 ]; then
-    ln -s /usr/bin/python3 /usr/share/maya22-panel-control/main.py /usr/local/bin/maya22
+if [ -L /usr/local/bin/maya22 ] || [ -e /usr/local/bin/maya22 ]; then
+    # Si el enlace simbólico o archivo ya existe, eliminarlo
+    rm /usr/local/bin/maya22
 fi
 
-# Crear enlace simbólico para ejecutar otro script de control desde la terminal
-#if [ ! -L /usr/local/bin/maya22-control ]; then
-#    ln -s /usr/bin/python3 /usr/share/maya22-panel-control/command/maya22-control.py /usr/local/bin/maya22-pycontrol
-#fi
+# Crear un script ejecutable en /usr/local/bin
+echo '#!/bin/bash
+/usr/bin/python3 /usr/share/maya22-panel-control/main.py' > /usr/local/bin/maya22
 
-# Detectar la ruta del escritorio del usuario
-USER_DESKTOP_DIR=$(sudo -u $SUDO_USER xdg-user-dir DESKTOP 2>/dev/null)
+# Dar permisos de ejecución al script
+chmod +x /usr/local/bin/maya22
+
+# Agregar al usuario al grupo plugdev para acceder a dispositivos HID
+if id -nG "$SUDO_USER" | grep -qw "plugdev"; then
+    echo "El usuario $SUDO_USER ya pertenece al grupo plugdev"
+else
+    usermod -aG plugdev "$SUDO_USER"
+    echo "El usuario $SUDO_USER ha sido añadido al grupo plugdev. Es necesario cerrar sesión y volver a iniciar sesión para aplicar los cambios."
+fi
+
+# --- Actualizar o crear la regla udev ---
+UDEV_RULE="/etc/udev/rules.d/99-hid.rules"
+UDEV_CONTENT='KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2573", ATTRS{idProduct}=="0017", GROUP="plugdev", MODE="0660", RUN+="/usr/local/bin/maya22-control -d"'
+
+# Si el archivo de reglas existe, eliminarlo para evitar conflictos
+if [ -f "$UDEV_RULE" ]; then
+    echo "Regla udev existente encontrada, eliminando..."
+    rm "$UDEV_RULE"
+fi
+
+# Crear el archivo de reglas con el contenido correcto
+echo "$UDEV_CONTENT" > "$UDEV_RULE"
+echo "Regla udev creada en $UDEV_RULE"
+
+# Recargar las reglas de udev para que se apliquen inmediatamente
+udevadm control --reload-rules
+udevadm trigger
+echo "Reglas de udev recargadas."
+
+# --- Manejo del escritorio del usuario ---
+USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+USER_DESKTOP_DIR=$(sudo -u "$SUDO_USER" xdg-user-dir DESKTOP 2>/dev/null)
+
+# Si no se puede detectar el escritorio con xdg-user-dir, intentar manualmente
 if [ -z "$USER_DESKTOP_DIR" ]; then
-    USER_DESKTOP_DIR="$HOME/Desktop"
-    if [ ! -d "$USER_DESKTOP_DIR" ]; then
-        USER_DESKTOP_DIR="$HOME/Escritorio"
+    if [ -d "$USER_HOME/Desktop" ]; then
+        USER_DESKTOP_DIR="$USER_HOME/Desktop"
+    elif [ -d "$USER_HOME/Escritorio" ]; then
+        USER_DESKTOP_DIR="$USER_HOME/Escritorio"
     fi
 fi
 
@@ -39,20 +72,12 @@ else
     echo "No se pudo encontrar el escritorio del usuario"
 fi
 
+echo "Copiando binario maya22-control"
+# Copiar el maya22-control (bin)
+rm -f usr/local/bin/maya22-control
+cp /usr/share/maya22-panel-control/maya22-control /usr/local/bin/
 
-# Detectar la ruta del escritorio del usuario
-USER_DESKTOP_DIR=$(sudo -u $SUDO_USER xdg-user-dir DESKTOP 2>/dev/null)
-if [ -z "$USER_DESKTOP_DIR" ]; then
-    USER_DESKTOP_DIR="$HOME/Desktop"
-    if [ ! -d "$USER_DESKTOP_DIR" ]; then
-        USER_DESKTOP_DIR="$HOME/Escritorio"
-    fi
-fi
+chmod 777 usr/local/bin/maya22-control
+chmod +x usr/local/bin/maya22-control
 
-# Copiar el archivo .desktop al escritorio del usuario
-if [ -d "$USER_DESKTOP_DIR" ]; then
-    cp /usr/share/maya22-panel-control/maya22.desktop "$USER_DESKTOP_DIR/"
-    chmod +x "$USER_DESKTOP_DIR/maya22.desktop"
-else
-    echo "No se pudo encontrar el escritorio del usuario"
-fi
+echo "exit"

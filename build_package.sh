@@ -12,6 +12,7 @@ mkdir -p $PACKAGE_NAME/DEBIAN
 # Copiar archivos fuente al directorio de instalación del paquete
 cp -r src/* $INSTALL_DIR/
 
+
 # Copiar los archivos de control y postinst al directorio DEBIAN
 cp debian/control $PACKAGE_NAME/DEBIAN/
 cp debian/postinst $PACKAGE_NAME/DEBIAN/
