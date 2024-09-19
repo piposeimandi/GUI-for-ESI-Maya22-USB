@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Maya22 Panel Control
+Comment=Panel de control para Maya22
+Exec=/usr/local/bin/maya22
+Icon=/usr/share/maya22-panel-control/icono.png
+Terminal=false
+Type=Application
+Categories=Utility;Settings;System;
+StartupWMClass=Maya22

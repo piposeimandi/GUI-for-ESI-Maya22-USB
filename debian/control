@@ -1,0 +1,8 @@
+Package: maya22-panel-control
+Version: 0.1
+Section: base
+Priority: optional
+Architecture: all
+Depends: python3 ,python3-tk ,python3-hid 
+Maintainer: Seimandi Adrán <bajosega@gmail.com>
+Description: This project provides a command line interface and a graphical interface to control the [ESI Maya22](http://www.esi-audio.com/products/maya22usb/) usb sound device. The interface allows you to adjust input and output volumes, enable/disable monitoring and headphones, and synchronize output volumes. Configuration is automatically saved to a JSON file.

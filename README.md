@@ -1,14 +1,20 @@
-# GUI for ESI Maya22 USB
+# 
+
+# ESI Maya22 GUI controller.
+
+This repository provides all the source files used to create the "maya22\_package.deb" package. You can download and build your own package or simply download the `.deb` file and install it using `dpkg -i maya22_package.deb`.
+
+## Creating the Debian Package
+
+This repository includes all the files and configurations required to create a Debian package for the ESI Maya22 GUI controller.
+
+ESI Maya22 USB Packege DEB
 
 This project provides a command line interface and a graphical interface to control the [ESI Maya22](http://www.esi-audio.com/products/maya22usb/) usb sound device. The interface allows you to adjust input and output volumes, enable/disable monitoring and headphones, and synchronize output volumes. Configuration is automatically saved to a JSON file.
 
-![panel control](./images/img1.png)
+![panel control](./docs/images/img1.png)
 
-The graphical interface is achieved by running the "main.py" file, which launches a GUI using python-tk. This interface interacts with "maya22-control.py," which communicates with the python-hidapi library responsible for sending and receiving data with the Maya22 USB sound interface.
-
-1. `.command/maya22-control.py` - Can be used via command line. More information is available in the readme.md. It handles sending and receiving data from the sound card using the hidapi library.
-
-2. `main.py` - Launches a graphical interface through which you can interact with `maya22-control.py`. Commands can be sent via the graphical interface.
+The graphical interface is achieved by running the "main.py" file, which launches a GUI using python-tk. This interface interacts with "[maya22-control](https://github.com/piposeimandi/esi-maya22-linux)" 
 
 ## General Features
 
@@ -16,7 +22,7 @@ The graphical interface is achieved by running the "main.py" file, which launche
 - Adjust output volumes (left and right).
 - Automatic synchronization of output volumes.
 - Enable and disable monitoring.
-- Enable headphones (all output).
+- Enable and disable (all output).
 - Select input channel.
 - Automatic configuration saving in a JSON file.
 
@@ -24,71 +30,12 @@ The graphical interface is achieved by running the "main.py" file, which launche
 
 - Python 3.x
 - Tkinter for Python - The standard Python library for creating graphical user interfaces (GUIs). It provides a simple way to build desktop applications using Python with a native look and feel on different operating systems.
-- HIDAPI for Python - A Python library that provides cross-platform support for communicating with USB and Bluetooth Human Interface Devices (HID). It allows easy interaction with HID devices like keyboards, mice, game controllers, and more.
+- (Incluida in the Deb ) "[maya22-control](https://github.com/piposeimandi/esi-maya22-linux)"
 
-## Installation
+This will install Python 3, the Tkinter GUI toolkit. 
 
-1. Clone this repository:
 
-   `git clone https://github.com/piposeimandi/esi-maya22-linux-gui`
-
-2. Navigate to the project directory:
-
-   `cd esi-maya22-linux-gui`
-
-## Installing Dependencies for ESI Maya22 Controller
-
-### For Debian/Ubuntu Systems
-
-To install the required dependencies using `apt-get`, follow these steps:
-
-1. Update your package list:
-
-   `sudo apt-get update`
-
-2. Install the necessary packages:
-
-   `sudo apt-get install python3 python3-tk python3-hid`
-
-This will install Python 3, the Tkinter GUI toolkit, and HID support.
-
-### For Arch Linux Systems
-
-To install the required dependencies using `pacman`, follow these steps:
-
-1. Update your system:
-
-   `sudo pacman -Syu`
-
-2. Install the necessary packages:
-
-   `sudo pacman -S python python-tk python-hidapi`
-
-These commands will install Python, Tkinter, and HID support on Arch Linux.
-
-## After Installation
-
-Once the dependencies are installed, you can run the Python script as usual:
-
-   `python3 main.py`
-
-## Configuration
-
-Configuration is saved in a JSON file named `config.json` in the same directory as the script. Settings are automatically loaded from this file when the application starts.
-
-## Information
-
-It was made possible thanks to the original `maya22-control` from the [rabits/esi-maya22-linux](https://github.com/rabits/esi-maya22-linux) repository.
-
-## Contributions
-
-Contributions are welcome. If you find any bugs or have improvements to propose, please open an issue or a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
 
 For any questions or comments, please contact [bajosega@gmail.com](mailto:bajosega@gmail.com).
-

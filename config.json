@@ -1,1 +1,1 @@
-{"input_channel": "line", "input_left_volume": 97.11764705882354, "input_right_volume": 85.91176470588235, "output_left_volume": 145.0, "output_right_volume": 145.0, "sync_outputs": false, "mute_output": false, "monitor": false}
+{"input_channel": "mute", "input_left_volume": 127.0, "input_right_volume": 95.25, "output_left_volume": 145.0, "output_right_volume": 145.0, "sync_outputs": false, "mute_output": false, "monitor": true}
